@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Movies 3.0</string>
+    <string name="error_loading_movieList">Error loading movies data. Check your network connection</string>
+    <string name="error_loading_specificMovie">Error loading movie data. Check your network connection</string>
+    <string name="error_loading_append">Loading Error</string>
+    <string name="end_is_reached">End is reached</string>
+
+
+</resources>
