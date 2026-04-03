@@ -22,7 +22,7 @@ object DatabaseModule {
             context,
             MovieDatabase::class.java, "movie_database"
         )
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(true)
             .build()
     }
 }

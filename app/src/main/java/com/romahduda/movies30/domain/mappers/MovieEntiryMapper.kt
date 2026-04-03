@@ -4,14 +4,14 @@ import com.romahduda.movies30.data.local.entity.MovieEntity
 import com.romahduda.movies30.data.remote.dto.MovieDto
 import com.romahduda.movies30.domain.models.Movie
 
-fun MovieDto.toMovieEntity() : MovieEntity {
+fun MovieDto.toMovieEntity(remoteIndex: Int): MovieEntity {
     return MovieEntity(
-        id = id,
-        title = title,
-        release_date = releaseDate,
-        vote_average = voteAverage,
-        poster_path = posterPath,
-        isFavorite = false
+        id = this.id,
+        title = this.title,
+        release_date = this.releaseDate,
+        vote_average = this.voteAverage,
+        poster_path = this.posterPath,
+        remoteIndex = remoteIndex
     )
 }
 

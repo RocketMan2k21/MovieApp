@@ -12,5 +12,6 @@ data class MovieEntity(
     @ColumnInfo("release_date") val release_date: String?,
     @ColumnInfo("vote_average") val vote_average: Double,
     @ColumnInfo("poster_path") val poster_path: String?,
-    @ColumnInfo("isFavorite") val isFavorite : Boolean = false
+    @ColumnInfo("isFavorite") val isFavorite : Boolean = false,
+    val remoteIndex : Int
 )
