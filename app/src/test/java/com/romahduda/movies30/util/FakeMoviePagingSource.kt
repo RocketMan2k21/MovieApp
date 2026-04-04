@@ -39,9 +39,5 @@ class FakeMoviePagingSource(
             LoadResult.Error(e)
         }
     }
-
-    fun setShouldReturnError(){
-        shouldReturnError = true
-    }
 }
 

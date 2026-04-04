@@ -12,17 +12,11 @@ class FakeMovieApi: MoviesApi {
     private val movies = arrayListOf<MovieDto>()
     private var movieById : MovieDetailsDto? = null
     private var returnsError = false
-    fun addMovieById(movie: MovieDetailsDto){
-        movieById = movie
-    }
 
     fun addMovie(movie: MovieDto){
         movies.add(movie)
     }
 
-    fun setReturnsError(){
-        returnsError = true
-    }
     override suspend fun getMoviesByPage(
         page: Int,
         apiKey: String

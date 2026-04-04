@@ -29,7 +29,8 @@ fun NavGraphBuilder.movieDetailsComposable(
         val selectedMovie by sharedViewModel.movieDetails.collectAsState()
 
         MovieDetailsScreen(
-            movie = selectedMovie
+            movie = selectedMovie,
+            onFavoriteClick = { movie -> sharedViewModel.switchFavoriteMovie(movie) }
         )
     }
 }

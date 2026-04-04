@@ -4,16 +4,7 @@ import com.romahduda.movies30.data.remote.dto.MovieDetailsDto
 import com.romahduda.movies30.data.remote.dto.MovieDto
 import com.romahduda.movies30.domain.models.Movie
 import com.romahduda.movies30.domain.models.MovieDetails
-
-fun MovieDto.toMovie(): Movie {
-    return Movie(
-        id = id,
-        title = title,
-        release_date = releaseDate,
-        vote_average = voteAverage,
-        poster_path = posterPath
-    )
-}
+import com.romahduda.movies30.domain.models.MovieToUpdate
 
 fun MovieDetailsDto.toMovieDetails(): MovieDetails {
     return MovieDetails(
@@ -26,6 +17,14 @@ fun MovieDetailsDto.toMovieDetails(): MovieDetails {
         runtime = runtime,
         budget = budget,
         revenue = revenue,
-        tagline = tagline
+        tagline = tagline,
     )
 }
+
+fun MovieDetails.toMovieUpdate(): MovieToUpdate =
+    MovieToUpdate(
+        id = id,
+        title = title,
+        isFavorite = isFavourite
+    )
+

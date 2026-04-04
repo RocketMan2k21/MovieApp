@@ -42,13 +42,14 @@ object NetworkModule {
     @Singleton
     fun provideRepoImpl(
         moviesApi: MoviesApi,
+        database: MovieDatabase,
         pager: Pager<Int, MovieEntity>
-    ): MovieRepo = MovieRepoImpl(moviesApi, pager)
+    ): MovieRepo = MovieRepoImpl(moviesApi, database.movieDetailsDao(), database.movieDao(), pager)
 
     @OptIn(ExperimentalPagingApi::class)
     @Provides
     @Singleton
-    fun provideMoviePager(db : MovieDatabase, moviesApi: MoviesApi): Pager<Int, MovieEntity> {
+    fun provideMoviePager(db: MovieDatabase, moviesApi: MoviesApi): Pager<Int, MovieEntity> {
         val pagingSourceFactory = { db.movieDao().getAllMovies() }
         return Pager(
             config = PagingConfig(pageSize = 20),

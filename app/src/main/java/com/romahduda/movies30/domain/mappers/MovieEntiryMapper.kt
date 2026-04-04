@@ -15,12 +15,24 @@ fun MovieDto.toMovieEntity(remoteIndex: Int): MovieEntity {
     )
 }
 
-fun MovieEntity.toMovie() : Movie =
+fun MovieEntity.toMovie(): Movie =
     Movie(
         id = id,
         title = title,
         release_date = release_date,
         vote_average = vote_average,
         poster_path = poster_path,
-        isFavorite = isFavorite
+        isFavorite = isFavorite,
+        remoteIndex = remoteIndex
+    )
+
+fun Movie.toMovieEntity(): MovieEntity =
+    MovieEntity(
+        id = id,
+        title = title,
+        release_date = release_date,
+        vote_average = vote_average,
+        poster_path = poster_path,
+        isFavorite = isFavorite,
+        remoteIndex = remoteIndex
     )

@@ -12,6 +12,7 @@ import com.romahduda.movies30.data.remote.api.MoviesApi
 import com.romahduda.movies30.data.remote.dto.MovieDto
 import com.romahduda.movies30.domain.mappers.toMovieEntity
 import com.romahduda.movies30.util.MovieDatabase
+import kotlinx.coroutines.flow.first
 import okio.IOException
 import retrofit2.HttpException
 import javax.inject.Inject
