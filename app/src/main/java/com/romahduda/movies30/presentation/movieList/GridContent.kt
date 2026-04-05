@@ -41,7 +41,6 @@ import com.romahduda.movies30.util.Constants.IMAGE_TMDB_BASE_URL
 fun GridContent(
     movies: LazyPagingItems<Movie>,
     navigateToMoviesDetailsScreen: (Int) -> Unit,
-    onFavoriteClick : (Movie) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
@@ -161,10 +160,11 @@ fun LoadingError(
 fun EndOfPaginationReachedMessage(
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.fillMaxWidth()) {
+    Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = stringResource(R.string.end_is_reached)
+            text = stringResource(R.string.end_is_reached),
+            textAlign = TextAlign.Center
         )
     }
 }

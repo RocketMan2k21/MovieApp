@@ -41,6 +41,8 @@ class MovieViewModel @Inject constructor(
     private val _movieDetails = MutableStateFlow<UiState<MovieDetails>>(UiState.Idle)
     val movieDetails: StateFlow<UiState<MovieDetails>> = _movieDetails
 
+    private var movieJob: Job? = null
+
     private val likedMovieEntries = movieRepo
         .getLikedMovieEntries()
 
@@ -62,9 +64,6 @@ class MovieViewModel @Inject constructor(
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UiState.Idle)
-
-
-    private var movieJob: Job? = null
 
     fun getMovieById(movieId: Int) {
         movieJob?.cancel()

@@ -71,7 +71,7 @@ fun MovieScreen(
         TabRow(
             selectedTabIndex = selectedTabIndex,
         ) {
-            PagerTabs.entries.forEachIndexed { index, tab -> 
+            PagerTabs.entries.forEachIndexed { index, tab ->
                 Tab(
                     text = {
                         Text(text = tab.title)
@@ -100,15 +100,14 @@ fun MovieScreen(
                     } else {
                         GridContent(
                             movies = movies,
-                            onFavoriteClick = { },
                             navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen,
                         )
                     }
                 }
             } else if (page == PagerTabs.FAVORITE.ordinal) {
-                when(likedMovies) {
+                when (likedMovies) {
                     is UiState.Error -> {
-                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             Text(
                                 text = (likedMovies as UiState.Error).error,
                                 textAlign = TextAlign.Center,
@@ -116,27 +115,19 @@ fun MovieScreen(
                             )
                         }
                     }
+
                     UiState.Loading -> {
                         CircularProgressIndicator()
                     }
+
                     is UiState.Success<*> -> {
-                        LazyColumn(
-                            Modifier
-                                .fillMaxSize()
-                                .animateContentSize(),
-                            contentPadding = PaddingValues(8.dp)
-                        ) {
-                            val data = (likedMovies as UiState.Success<List<Movie>>).data
-                            items(data) { movie ->
-                               MovieItem(
-                                   movie,
-                                   modifier = Modifier
-                                       .padding(8.dp)
-                                       .clickable { navigateToMoviesDetailsScreen(movie.id) }
-                               )
-                            }
-                        }
+                        val movieList = (likedMovies as UiState.Success<List<Movie>>).data
+                        LikedListContent(
+                            movieList,
+                            navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen
+                        )
                     }
+
                     UiState.Idle -> Unit
                 }
             }
