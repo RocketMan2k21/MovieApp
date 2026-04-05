@@ -6,7 +6,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.RemoteMediator
 import com.romahduda.movies30.data.local.MovieRemoteMediator
 import com.romahduda.movies30.data.local.entity.MovieEntity
-import com.romahduda.movies30.data.remote.api.MoviePagingSource
 import com.romahduda.movies30.data.remote.api.MoviesApi
 import com.romahduda.movies30.data.remote.dto.MovieDto
 import com.romahduda.movies30.data.remote.repository.MovieRepo
@@ -44,7 +43,7 @@ object NetworkModule {
         moviesApi: MoviesApi,
         database: MovieDatabase,
         pager: Pager<Int, MovieEntity>
-    ): MovieRepo = MovieRepoImpl(moviesApi, database.movieDetailsDao(), database.movieDao(), pager)
+    ): MovieRepo = MovieRepoImpl(moviesApi, database.movieDao(), pager)
 
     @OptIn(ExperimentalPagingApi::class)
     @Provides

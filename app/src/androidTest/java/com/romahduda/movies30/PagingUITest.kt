@@ -31,7 +31,9 @@ class PagingUITest {
                 title = "Movie $it",
                 vote_average = 5.0,
                 release_date = "2022-01-01",
-                poster_path = "/path$it"
+                poster_path = "/path$it",
+                isFavorite = false,
+                remoteIndex = 1
             )
         }
 

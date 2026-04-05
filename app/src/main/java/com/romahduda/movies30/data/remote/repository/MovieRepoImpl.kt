@@ -4,12 +4,12 @@ import androidx.paging.Pager
 import androidx.paging.map
 import com.romahduda.movies30.BuildConfig
 import com.romahduda.movies30.data.local.dao.MovieDao
-import com.romahduda.movies30.data.local.dao.MovieDetailsDao
 import com.romahduda.movies30.data.local.entity.LikedMovieEntity
 import com.romahduda.movies30.data.local.entity.MovieEntity
 import com.romahduda.movies30.data.remote.api.MoviesApi
 import com.romahduda.movies30.domain.mappers.toMovie
 import com.romahduda.movies30.domain.mappers.toMovieDetails
+import com.romahduda.movies30.domain.models.Movie
 import com.romahduda.movies30.domain.models.MovieDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
@@ -31,6 +31,10 @@ class MovieRepoImpl @Inject constructor(
                 it.toMovie()
             }
         }
+
+    override fun getMovieList(): Flow<List<Movie>> {
+        return movieDao.getAllMoviesFlow().map { it.map { movie -> movie.toMovie() } }
+    }
 
     override suspend fun makeMovieFavorite(movieId: Int) {
         movieDao.insertLikedEntry(LikedMovieEntity(id = movieId))

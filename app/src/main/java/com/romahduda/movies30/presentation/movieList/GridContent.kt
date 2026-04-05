@@ -59,8 +59,10 @@ fun GridContent(
         movies.apply {
             when (loadState.append) {
                 is LoadState.Loading -> {
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        CircularProgressIndicator()
+                    item {
+                        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
+                        }
                     }
                 }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import com.romahduda.movies30.data.remote.repository.MovieRepo
 import com.romahduda.movies30.domain.models.Movie
 import com.romahduda.movies30.domain.models.MovieDetails
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
@@ -41,12 +43,28 @@ class MovieViewModel @Inject constructor(
 
     private val likedMovieEntries = movieRepo
         .getLikedMovieEntries()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    private var movieJob: Job? = null
     val moviesPagingFlow: Flow<PagingData<Movie>> = movieRepo
         .getPagingMovieFlow()
         .cachedIn(viewModelScope)
+
+    val likedMovies: StateFlow<UiState<List<Movie>>> = movieRepo
+        .getMovieList()
+        .catch { throwable -> UiState.Error("Error while fetching favourite movies") }
+        .combine(likedMovieEntries) { movieList, likedIds ->
+            movieList.filter { movie -> likedIds.any { it.id == movie.id } }
+        }
+        .map { movieList ->
+            if (movieList.isNotEmpty()) {
+                UiState.Success(movieList)
+            } else {
+                UiState.Error("You don't have favourite movies")
+            }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UiState.Idle)
+
+
+    private var movieJob: Job? = null
 
     fun getMovieById(movieId: Int) {
         movieJob?.cancel()
@@ -54,7 +72,7 @@ class MovieViewModel @Inject constructor(
         movieJob = viewModelScope.launch {
             movieRepo.getMovieById(movieId)
                 .catch { e ->
-                    _movieDetails.value = UiState.Error(e)
+                    _movieDetails.value = UiState.Error("Error fetching movie data")
                 }
                 .collect {
                     _movieDetails.value = UiState.Success(it)

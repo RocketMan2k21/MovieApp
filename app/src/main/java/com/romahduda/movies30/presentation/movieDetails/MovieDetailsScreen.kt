@@ -188,7 +188,7 @@ private fun DisplayMovie(
             Icon(
                 Icons.Rounded.Star,
                 modifier = Modifier.size(isStarScaled),
-                tint = if (movie.isFavourite) MaterialTheme.colorScheme.primary else Color.Gray,
+                tint = if (movie.isFavourite) Color.White else Color.Gray,
                 contentDescription = "Favorite"
             )
         }

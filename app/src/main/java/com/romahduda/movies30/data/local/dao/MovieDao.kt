@@ -16,6 +16,9 @@ interface MovieDao {
     @Query("SELECT * FROM movie_table ORDER BY remoteIndex ASC")
     fun getAllMovies(): PagingSource<Int, MovieEntity>
 
+    @Query("SELECT * FROM movie_table ORDER BY remoteIndex ASC")
+    fun getAllMoviesFlow() : Flow<List<MovieEntity>>
+
     @Query("SELECT * FROM liked_movies_table")
     fun selectLikedEntries(): Flow<List<LikedMovieEntity>>
 
