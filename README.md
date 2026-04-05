@@ -8,6 +8,9 @@
 - Retrofit (Networking)
 - Room for caching, RemoteMediator for paging
 
+### Suggested improvements
+  - Current ui messages (errors, success) couldn't be all translated on different devices, since hardcoded strings are in use for simplicity ( not from String resources). I can create smht like UiStringWrapper to access the string resources from viewmodel, or map it in UI
+    
 
 ## Screenshots
 
