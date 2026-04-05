@@ -11,10 +11,13 @@ import com.romahduda.movies30.domain.mappers.toMovie
 import com.romahduda.movies30.domain.mappers.toMovieDetails
 import com.romahduda.movies30.domain.models.Movie
 import com.romahduda.movies30.domain.models.MovieDetails
+import com.romahduda.movies30.util.DataResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 
@@ -24,17 +27,14 @@ class MovieRepoImpl @Inject constructor(
     private val pager: Pager<Int, MovieEntity>
 ) : MovieRepo {
 
-    override fun getPagingMovieFlow() = pager
-        .flow
-        .map { pager ->
-            pager.map {
-                it.toMovie()
-            }
-        }
-
-    override fun getMovieList(): Flow<List<Movie>> {
-        return movieDao.getAllMoviesFlow().map { it.map { movie -> movie.toMovie() } }
+    override fun getPagingMovieFlow() = pager.flow.map { pagingData ->
+        pagingData.map { entity -> entity.toMovie() }
     }
+
+    override fun getMovieList(): Flow<List<Movie>> =
+        movieDao.getAllMoviesFlow().map { list ->
+            list.map { entity -> entity.toMovie() }
+        }
 
     override suspend fun makeMovieFavorite(movieId: Int) {
         movieDao.insertLikedEntry(LikedMovieEntity(id = movieId))
@@ -44,21 +44,27 @@ class MovieRepoImpl @Inject constructor(
         return movieDao.removeLikedEntry(movieId)
     }
 
-    override suspend fun getMovieById(movieId: Int): Flow<MovieDetails> = flow {
-        val baseMovieDetails = moviesApi
-            .getMovieById(movieId, BuildConfig.MOVIES_API_KEY)
-            .toMovieDetails()
+    override suspend fun getMovieById(movieId: Int): Flow<DataResult<MovieDetails>> = flow {
+        try {
+            val baseMovieDetails = moviesApi
+                .getMovieById(movieId, BuildConfig.MOVIES_API_KEY)
+                .toMovieDetails()
 
-        val favoriteFlow = movieDao.isMovieLikedFlow(movieId)
-
-        emitAll(
-            favoriteFlow.map { isLiked ->
-                baseMovieDetails.copy(isFavourite = isLiked)
-            }
-        )
+            emitAll(
+                movieDao.isMovieLikedFlow(movieId).map { isLiked ->
+                    DataResult.Success(baseMovieDetails.copy(isFavourite = isLiked))
+                }
+            )
+        } catch (e: IOException) {
+            emit(DataResult.Error("No internet connection."))
+        } catch (e: HttpException) {
+            emit(DataResult.Error("Server error: ${e.code()}"))
+        } catch (e: Exception) {
+            emit(DataResult.Error("An unexpected error occurred."))
+        }
     }
 
-    override fun getLikedMovieEntries() : Flow<List<LikedMovieEntity>> {
+    override fun getLikedMovieEntries(): Flow<List<LikedMovieEntity>> {
         return movieDao.selectLikedEntries()
     }
 }

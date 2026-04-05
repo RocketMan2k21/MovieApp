@@ -42,6 +42,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.romahduda.movies30.R
 import com.romahduda.movies30.domain.models.Movie
+import com.romahduda.movies30.presentation.ErrorMessage
 import com.romahduda.movies30.presentation.viewmodels.MovieViewModel
 import com.romahduda.movies30.util.UiState
 import kotlinx.coroutines.launch
@@ -59,7 +60,7 @@ fun MovieScreen(
     modifier: Modifier = Modifier
 ) {
     val movies = sharedViewModel.moviesPagingFlow.collectAsLazyPagingItems()
-    val likedMovies by sharedViewModel.likedMovies.collectAsState()
+    val likedMovies = sharedViewModel.likedMovies.collectAsState()
     val pagerState = rememberPagerState { PagerTabs.entries.size }
     val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
     val coroutineScope = rememberCoroutineScope()
@@ -105,23 +106,17 @@ fun MovieScreen(
                     }
                 }
             } else if (page == PagerTabs.FAVORITE.ordinal) {
-                when (likedMovies) {
+                when (val result = likedMovies.value) {
                     is UiState.Error -> {
-                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text(
-                                text = (likedMovies as UiState.Error).error,
-                                textAlign = TextAlign.Center,
-                                color = Color.Gray
-                            )
-                        }
+                        ErrorMessage(msg = result.error)
                     }
 
                     UiState.Loading -> {
                         CircularProgressIndicator()
                     }
 
-                    is UiState.Success<*> -> {
-                        val movieList = (likedMovies as UiState.Success<List<Movie>>).data
+                    is UiState.Success<List<Movie>> -> {
+                        val movieList = result.data
                         LikedListContent(
                             movieList,
                             navigateToMoviesDetailsScreen = navigateToMoviesDetailsScreen

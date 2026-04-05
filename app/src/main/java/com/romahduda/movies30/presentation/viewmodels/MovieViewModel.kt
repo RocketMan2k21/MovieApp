@@ -10,6 +10,7 @@ import com.romahduda.movies30.data.remote.repository.MovieRepo
 import com.romahduda.movies30.domain.models.Movie
 import com.romahduda.movies30.domain.models.MovieDetails
 import com.romahduda.movies30.domain.models.MovieToUpdate
+import com.romahduda.movies30.util.DataResult
 import com.romahduda.movies30.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -73,8 +74,15 @@ class MovieViewModel @Inject constructor(
                 .catch { e ->
                     _movieDetails.value = UiState.Error("Error fetching movie data")
                 }
-                .collect {
-                    _movieDetails.value = UiState.Success(it)
+                .collect { result ->
+                    when (result) {
+                        is DataResult.Error -> {
+                            _movieDetails.value = UiState.Error(result.message)
+                        }
+                        is DataResult.Success<MovieDetails> -> {
+                            _movieDetails.value = UiState.Success(result.data)
+                        }
+                    }
                 }
         }
     }
