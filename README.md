@@ -7,7 +7,7 @@
 - Hilt (Dependency Injection)
 - Retrofit (Networking)
 - Room for caching, RemoteMediator for paging
-- Clean Architecture (Data / Domain / Presentation)
+
 
 ## Screenshots
 
