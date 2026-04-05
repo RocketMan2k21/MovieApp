@@ -1,5 +1,6 @@
 package com.romahduda.movies30.presentation.movieList
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,14 +16,19 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
@@ -95,32 +101,45 @@ fun MovieItem(
         modifier = modifier,
         elevation = CardDefaults.cardElevation()
     ) {
-        AsyncImage(
-            model = IMAGE_TMDB_BASE_URL + movie.poster_path,
-            contentDescription = movie.title,
+        Box(
             modifier = Modifier
                 .height(300.dp)
-                .fillMaxWidth(),
-            contentScale = ContentScale.Crop
-        )
-        Column(
-            modifier = Modifier
-                .padding(8.dp)
                 .fillMaxWidth()
         ) {
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = movie.release_date!!.split("-")[0], // Only showing the year
-                modifier = Modifier.padding(horizontal = 8.dp)
+            AsyncImage(
+                model = IMAGE_TMDB_BASE_URL + movie.poster_path,
+                contentDescription = movie.title,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = movie.title,
+
+            Column(
                 modifier = Modifier
-                    .padding(horizontal = 8.dp),
-                maxLines = 2,
-                minLines = 2
-            )
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                Color.Black
+                            )
+                        )
+                    )
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    textAlign = TextAlign.End,
+                    text = movie.title,
+                    color = Color.White,
+                    style = MaterialTheme.typography.labelLarge,
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    maxLines = 2,
+                    minLines = 2
+                )
+            }
         }
     }
 }
@@ -132,6 +151,7 @@ fun LoadingError(
     Box(modifier = modifier.fillMaxWidth()) {
         Text(
             modifier = Modifier.align(Alignment.Center),
+            color = Color.Gray,
             text = stringResource(id = R.string.error_loading_specificMovie)
         )
     }
