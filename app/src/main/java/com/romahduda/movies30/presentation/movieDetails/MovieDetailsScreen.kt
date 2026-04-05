@@ -116,7 +116,7 @@ private fun DisplayMovie(
                     translationY = -scrollState.value * 0.5f
                     alpha = 1f - (scrollState.value / (headerHeight.toPx() * 1.2f)).coerceIn(0f, 1f)
                 },
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
 
         Column(
@@ -188,7 +188,7 @@ private fun DisplayMovie(
             Icon(
                 Icons.Rounded.Star,
                 modifier = Modifier.size(isStarScaled),
-                tint = if (movie.isFavourite) Color.White else Color.Gray,
+                tint = if (movie.isFavourite) Color.White else Color.LightGray,
                 contentDescription = "Favorite"
             )
         }

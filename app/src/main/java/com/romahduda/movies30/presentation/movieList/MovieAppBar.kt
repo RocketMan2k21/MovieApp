@@ -25,10 +25,6 @@ fun MovieAppBar(
                 fontWeight = FontWeight.W400
             )
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary
-        ),
         scrollBehavior = scrollBehavior
     )
 }
